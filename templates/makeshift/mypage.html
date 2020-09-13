@@ -3,7 +3,7 @@
 {% bootstrap_javascript jquery='full' %}
 <!DOCTYPE html>
 
-<html lang="ja" class="my-3 mx-4">
+<html lang="ja" class="my-5 mx-3">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -13,12 +13,16 @@
 </head>
 <body>
 
-<h2>{{ loginuser }} さん</h2>
+<h2 class="bg-light"><big>{{ loginuser }}</big><small>さん。こんにちは。</small></h2> 
+{{ loginuser }}さんのマイページです。<br><br>
+
 <form action="submitdays">
-シフト提出はこちら
-<button class="btn btn-secondary">シフト提出 & 各種設定</button>
+
+<h3><i><b>シフト提出</b></i></h3>
+来月のシフト提出はこちら↓<br><br>
+<button class="btn btn-success btn-lg">シフト提出 & 各種設定</button>
 </form>
-<hr>
+<br><hr>
 
 <h4><i><b>{{ groupID }}メンバー提出状況</b></i></h4>
 {% for user in group_users %}
@@ -26,7 +30,7 @@
 {% endfor %}
 
 <hr>
-<h4><i><b>シフト作成</b></i></h4>
+<h3><i><b>シフト作成</b></i></h3>
 **カレンダーから<span class="text-danger">休業日を選択</span>してから<b>シフト作成</b> ボタンを押してください。
 <br><br>
 
@@ -35,13 +39,13 @@
 <form method="post" action="shift">
 	{% csrf_token %}
 	<input type="hidden" id="rest_days" name="rest_days">
-	<input type="submit" class="btn btn-warning" value="シフト作成">
+	<input type="submit" class="btn btn-warning btn-lg" value="シフト作成">
 </form>
 
 <hr>
 
 <form action="../logout">
-<button type="submit" class="btn btn-light">ログアウト</button>
+<button type="submit" class="btn btn-secondary">ログアウト</button>
 </form>
 
 <script type ="text/javascript" src="{% static 'makeshift/selectdays.js' %}"></script>

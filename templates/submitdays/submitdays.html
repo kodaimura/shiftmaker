@@ -3,7 +3,7 @@
 {% bootstrap_javascript jquery='full' %}
 <!DOCTYPE html>
 
-<html lang="ja" class="my-5 mx-5">
+<html lang="ja" class="my-5 mx-3">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -13,13 +13,15 @@
 </head>
 <body>
 
-<h2>{{ loginuser }} さん</h2>
+<h2 class="bg-light"><big>{{ loginuser }}</big><small>さん</small></h2> 
 <form action="../mypage">
-<button type="submit" class="btn btn-light">戻る</button>
+<button type="submit" class="btn btn-secondary">マイページへ戻る</button>
 </form>
 <hr>
 <h3><i><b>シフト提出</b></i></h3>
-<p>*入れる日をタップして選択して下さい</p>
+1. 入れる日をタップして選択<br>
+2. 表示名などを指定(**変更がない場合はそのままで)<br>
+3. 送信ボタンで保存<br><br>
 <div id="calendar"></div>
 
 <br>
@@ -33,7 +35,7 @@
 	<b><i>グループID:</i></b> {{ profile_form.group }}<span class="text-danger"><br>*グループIDはグループ全員が共通したIDを設定してください。半角5文字以上推奨。</span><br>
 	{{ profile_form.days.as_hidden }}<br>
 
-	<input type="submit" class="btn btn-primary" id="send" value="送信">
+	<input type="submit" class="btn btn-primary btn-lg" id="send" value="送信">
 </form>
 
 <br><hr>

@@ -42,7 +42,7 @@ for (let w = 0; w < 6; w++) {
             calendar2 += '<td></td>'
         } else {
             calendar += `<td><font size="3">${count}</font>
-                        <input type="text" size="7" id="${count}"></td>`
+                        <input type="text" size="6" id="${count}"></td>`
             calendar2 += `<td id="*${count}"></td>`
             count++
         }
