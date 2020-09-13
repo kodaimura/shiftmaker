@@ -1,0 +1,41 @@
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
+
+<html lang="ja" class="my-3 mx-4">
+<head>
+<meta charset="UTF-8">
+<title>サインアップ</title>
+</head>
+<body>
+  <p>アカウントをすでにお持ちの方は
+    <a href="../login/">こちら</a>からログインしてください。</p>
+
+  <h2>アカウント登録</h2>
+  <p>**全て必須項目です</p>
+  <hr>
+  <form method="post">
+    {% csrf_token %}
+    <h4>ログイン用</h4>
+    ユーザー名: {{ user_form.username }}<br>
+    パスワード: {{ user_form.password1 }}<br>
+    パスワード(確認用): {{ user_form.password2 }}<br>
+    <hr>
+    <h4>プロフィール</h4>
+    表示名(1文字): {{ profile_form.name }} **表示に使う名前<br>
+    仕事内容: {{ profile_form.role }}<br>
+    グループID: {{ profile_form.group }} 
+    <span class="text-danger"><br>
+  **グループIDはグループ全員が共通したIDを設定してください。<br>
+  オーナーはIDを決めてグループ全員に共有して下さい。半角5文字以上推奨。</span><br>
+    <hr>
+    <button type="submit" class="btn btn-primary">登録</button>
+  </form>
+<br>
+
+<form action="../login">
+<button type="submit" class="btn btn-link">戻る</button>
+</form>
+
+</body>
+</html>

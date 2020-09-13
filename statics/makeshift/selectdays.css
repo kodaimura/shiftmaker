@@ -1,0 +1,23 @@
+.selected {
+	background-color: #ddd;	
+}
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 140%;
+    width: 75px;
+    height: 75px;
+}
+
+td:first-child {
+    color: red;
+}
+
+td:last-child {
+    color: royalblue;
+}

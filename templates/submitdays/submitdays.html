@@ -1,0 +1,43 @@
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
+
+<html lang="ja" class="my-5 mx-5">
+<head>
+<meta charset="UTF-8">
+<title>シフト提出</title>
+<link rel="stylesheet" href="{% static 'submitdays/submitdays.css' %}">
+
+</head>
+<body>
+
+<h2>{{ loginuser }} さん</h2>
+<form action="../mypage">
+<button type="submit" class="btn btn-light">戻る</button>
+</form>
+<hr>
+<h3><i><b>シフト提出</b></i></h3>
+<p>*入れる日をタップして選択して下さい</p>
+<div id="calendar"></div>
+
+<br>
+<form method="post">
+	{% csrf_token %}
+	<b><i>表示名:</i></b> {{ profile_form.name }}<br>
+	<b><i>キッチンorホール:</i></b> {{ profile_form.role }}<br>
+	<b><i>シフト多め希望:</i></b> {{ profile_form.morethan }}<br>
+	*他のメンバーより2日ほど多くなります。<br>
+	*他との兼ね合いで多くならないこともあります。<br><br>
+	<b><i>グループID:</i></b> {{ profile_form.group }}<span class="text-danger"><br>*グループIDはグループ全員が共通したIDを設定してください。半角5文字以上推奨。</span><br>
+	{{ profile_form.days.as_hidden }}<br>
+
+	<input type="submit" class="btn btn-primary" id="send" value="送信">
+</form>
+
+<br><hr>
+
+
+<script type ="text/javascript" src="{% static 'submitdays/submitdays.js' %}"></script>
+</body>
+</html>

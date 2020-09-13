@@ -1,0 +1,48 @@
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
+
+<html lang="ja" class="my-3 mx-4">
+<head>
+<meta charset="UTF-8">
+<title>マイページ</title>
+<link rel="stylesheet" href="{% static 'makeshift/selectdays.css' %}">
+
+</head>
+<body>
+
+<h2>{{ loginuser }} さん</h2>
+<form action="submitdays">
+シフト提出はこちら
+<button class="btn btn-secondary">シフト提出 & 各種設定</button>
+</form>
+<hr>
+
+<h4><i><b>{{ groupID }}メンバー提出状況</b></i></h4>
+{% for user in group_users %}
+	<p>{{ user.name }}{{ user.days }}</p>
+{% endfor %}
+
+<hr>
+<h4><i><b>シフト作成</b></i></h4>
+**カレンダーから<span class="text-danger">休業日を選択</span>してから<b>シフト作成</b> ボタンを押してください。
+<br><br>
+
+<div id="calendar"></div>
+<br>
+<form method="post" action="shift">
+	{% csrf_token %}
+	<input type="hidden" id="rest_days" name="rest_days">
+	<input type="submit" class="btn btn-warning" value="シフト作成">
+</form>
+
+<hr>
+
+<form action="../logout">
+<button type="submit" class="btn btn-light">ログアウト</button>
+</form>
+
+<script type ="text/javascript" src="{% static 'makeshift/selectdays.js' %}"></script>
+</body>
+</html>

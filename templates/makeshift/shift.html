@@ -1,0 +1,101 @@
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
+
+<html lang="ja" class="my-5 mx-5">
+<head>
+<meta charset="UTF-8">
+<title>シフト</title>
+<link rel="stylesheet" href="{% static 'makeshift/shift.css' %}">
+
+</head>
+<body>
+<p>リロードすると多少変化します。</p>
+<p>シフトカレンダーは入力フォームになってるので、<span class="text-primary">手入力で編集可能</span>です。</p>
+<p>手直ししてスクリーンショット等で記録してください。</p>
+<br>
+
+<div id="calendar"></div>
+<br>
+<div id="count"></div>
+
+<br>
+<hr>
+<h4><i><b>書き換え候補</b></i></h4>
+<div id="calendar2"></div>
+
+<hr>
+<form action="../mypage">
+<button type="submit" class="btn btn-light">マイページに戻る</button>
+</form>
+
+<hr>
+<form action="../../logout">
+<button type="submit" class="btn btn-light">ログアウト</button>
+</form>
+
+<script type ="text/javascript" src="{% static 'makeshift/shift.js' %}"></script>
+<script type ="text/javascript">
+	let shift = "{{ shift|safe }}"
+	shift = shift.replace(/'/g, " ").split(',')
+	for (i in shift){
+		let input = document.getElementById(`${i}`)
+		if (input !== null){
+			input.value = shift[i]
+		}
+	}
+
+	let candidate = "{{ candidate|safe }}"
+	candidate = candidate.replace(/'/g, " ").split(',')
+	for (i in candidate){
+		let elm = document.getElementById(`*${i}`)
+		if (elm !== null){
+			elm.innerHTML = candidate[i]
+		}
+	}
+
+	function countEach(){
+		let dic = {}
+		let str = ""
+		for (let i = 1; i < 32; i++){
+			let input = document.getElementById(`${i}`)
+			if (input !== null){
+				str += input.value
+			}
+		}
+
+		for (let s of str){
+			if (s !== " "){
+				if (dic[s]){
+					dic[s] += 1 
+				}else{
+					dic[s] = 1
+				}
+			}	
+		}
+
+		let count = `<font size="4">`
+		for (let k in dic){
+			count += ` ${k}: ${dic[k]} <font color="#aaa">/</font>` 
+		}
+		count += `</font>`
+		document.getElementById('count').innerHTML = count
+	}
+	countEach()
+
+
+    for (let i = 1; i < 32; i++) {
+    	let input = document.getElementById(`${i}`)
+    	if (!input) {
+    		continue
+    	}
+        input.addEventListener('input', 
+            function(event){
+                countEach()
+        })
+    }
+
+</script>
+</body>
+</html>
