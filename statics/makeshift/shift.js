@@ -35,14 +35,14 @@ for (let w = 0; w < 6; w++) {
     calendar2 += '<tr>'
     for (let d = 0; d < 7; d++) {
         if (w == 0 && d < startDay) {
-            calendar += '<td><input type="text" size="6"></td>'
+            calendar += '<td><input type="text" size="5"></td>'
             calendar2 += '<td></td>'
         } else if (count > countDays) {
             calendar += '<td></td>'
             calendar2 += '<td></td>'
         } else {
             calendar += `<td><font size="3">${count}</font>
-                        <input type="text" size="6" id="${count}"></td>`
+                        <input type="text" size="5" id="${count}"></td>`
             calendar2 += `<td id="*${count}"></td>`
             count++
         }
