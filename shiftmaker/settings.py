@@ -28,7 +28,7 @@ SECRET_KEY = ')cmxe%dj*q&m&uz(4y_ubjt93b*v2ql89=y9@z!dd#6@67n^18'
 DEBUG = False
 
 #herokuデプロイ用
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
 
 
 # Application definition
@@ -84,12 +84,22 @@ WSGI_APPLICATION = 'shiftmaker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'name',
+        'USER': 'user',
+        'PASSWORD': '',
+        'HOST': 'host',
+        'PORT': '',
+    }
+}
+
 #herokuデプロイ用
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES = {
     'default': db_from_env
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
