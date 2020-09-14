@@ -5,6 +5,10 @@ from .forms import UserCreateForm, LoginForm
 from submitdays.forms import ProfileForm
 
 
+def index(request):
+    return render(request, 'account/index.html')
+
+
 class Login(LoginView):
     form_class = LoginForm
     template_name = 'account/login.html'
