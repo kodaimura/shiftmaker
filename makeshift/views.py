@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from submitdays.models import Profile
+#from .models import Shift
 from django.db.models import Q
 
 import itertools
@@ -35,12 +36,12 @@ def shift(request):
 	group_users = Profile.objects.filter(Q(days__isnull = False) & Q(group = groupID) 
 			& Q(update_at__year = date.year) & Q(update_at__month= date.month))
 
-	rest_days = request.POST.get('rest_days') #休業日 "[1,8,15,..]" 
+	r = request.POST.get('rest_days') #休業日 "[1,8,15,..]" 
 	# "[1,8,15,..]" -> [1,8,15,..]
-	if (not rest_days):
+	if (not r):
 		rest_days = []
 	else:
-		rest_days = rest_days.lstrip('[').rstrip(']').split(',')
+		rest_days = r.lstrip('[').rstrip(']').split(',')
 
 	#role_dict はkeyがメンバーの名前、
 	#valueが仕事内容(1、2、3)のハッシュ(それぞれキッチン、ホール、両方)
@@ -67,16 +68,17 @@ def shift(request):
 
 	#makeshiftでシフトを組んで javascriptで表示しやすいよう整形
 	shift = makeshift(lls, role_dic, morethan_list)
-	shift = [i if type(i) is 'str' else " ".join(i) for i in shift]
+	shift = [i if type(i) == 'str' else " ".join(i) for i in shift]
 	shift = str(shift).lstrip('[').rstrip(']')
 
-	lls = [i if type(i) is 'str' else " ".join(i) for i in lls]
+	lls = [i if type(i) == 'str' else " ".join(i) for i in lls]
 	lls = str(lls).lstrip('[').rstrip(']')
 	
 	context = {
 		"shift": shift,
 		"group_users": group_users,
 		"candidate": lls,
+		"rest_days": r
 	}
 	return render(request, 'makeshift/shift.html', context)
 
@@ -142,7 +144,17 @@ def eval(shift, morethan_list):
 	return statistics.pvariance(l), len(l)
 
 
-
+"""
+def keepshift(request):
+	loginuser = request.user
+	user_obj = request.user.profile
+	groupID = user_obj.group
+	date = datetime.datetime.now()
+	keepshift = request.POST.get('keepshift')
+	candidate = request.POST.get('candidate')
+	print(keepshift)
+	print(candidate)
+"""
 
 
 

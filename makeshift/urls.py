@@ -6,4 +6,5 @@ app_name = 'makeshift'
 urlpatterns = [
 	path('', views.mypage),
 	path('shift', views.shift),
+	#path('keepshift', views.keepshift),
 ]
