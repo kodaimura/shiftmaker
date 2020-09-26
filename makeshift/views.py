@@ -92,17 +92,11 @@ def makeshift(lls, role_dic, morethan_list):
 	shift = []
 
 	#仮のシフトをランダムに組んで、最も評価の高いシフトに決定する。
-	for i in range(30000):
-		shift0 = [] 
-		for k in lls:
-			if (k == []):
-				shift0.append(k)
-			else:
-				shift0.append(random.choice(k))
+	for i in range(50000):
+		shift0 = [[] if k==[] else random.choice(k) for k in lls]
+
 		variance, n = eval(shift0, morethan_list)
-		if n < num_of_member:
-			continue
-		if minimum > variance:
+		if n < num_of_member and minimum > variance:
 			minimum = variance
 			shift = shift0
 
@@ -119,7 +113,7 @@ def makepairs(ls, role_dic):
 
 	combs = list(map (lambda tup: list(tup), list(itertools.combinations(ls, 2))))
 	ret = list(filter(lambda ls: role_dic[ls[0]] == 3 
-		or role_dic[ls[0]] == 3 or (role_dic[ls[0]]+role_dic[ls[1]]) == 3, combs))
+		or role_dic[ls[1]] == 3 or (role_dic[ls[0]]+role_dic[ls[1]]) == 3, combs))
 
 	if ret:
 		return ret 
@@ -131,17 +125,14 @@ def makepairs(ls, role_dic):
 # シフトの評価関数 (分散の計算) 
 # 分散が小さいシフト->全員均等に入れている。
 def eval(shift, morethan_list):
-	ls = list(itertools.chain.from_iterable 
-	         (list(itertools.chain.from_iterable(shift))))
-
+	ls = list(itertools.chain.from_iterable(shift))
 	c = collections.Counter(ls)
 
 	#シフト多め希望者には2日分引いた値で評価する
 	for member in morethan_list:
 		c[member] -= 2
-	l = c.values()
 
-	return statistics.pvariance(l), len(l)
+	return statistics.pvariance(c.values()), len(c)
 
 
 """
