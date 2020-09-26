@@ -96,7 +96,7 @@ def makeshift(lls, role_dic, morethan_list):
 		shift0 = [[] if k==[] else random.choice(k) for k in lls]
 
 		variance, n = eval(shift0, morethan_list)
-		if n < num_of_member and minimum > variance:
+		if n == num_of_member and minimum > variance:
 			minimum = variance
 			shift = shift0
 
