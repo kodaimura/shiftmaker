@@ -92,7 +92,7 @@ def makeshift(lls, role_dic, morethan_list):
 	shift = []
 
 	#仮のシフトをランダムに組んで、最も評価の高いシフトに決定する。
-	for i in range(50000):
+	for i in range(30000):
 		shift0 = [] 
 		for k in lls:
 			if (k == []):
