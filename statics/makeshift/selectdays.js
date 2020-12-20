@@ -7,7 +7,7 @@ function nextYear (year, month){
 	return (month == 11)? ++year : year;
 }
 function nextMonth (year, month){
-	return (month == 11)? 1 : ++month;
+	return (month == 11)? 0 : ++month;
 }
 
 const startDate = new Date(nextYear(y, m), nextMonth(y, m), 1)
