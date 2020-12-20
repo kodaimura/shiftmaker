@@ -58,6 +58,12 @@ def shift(request):
 		if member.morethan:
 			morethan_list.append(name)
 		itr = member.days.lstrip('[').rstrip(']').split(',')
+
+		#応急処置 日付選択せずにシフト送信した人がいた場合
+		#itr = ['']になって '' がint型にできない
+		if itr[0] == '':
+			continue
+
 		for day in itr:
 			ls = lls[int(day)].copy()
 			ls.append(name)
