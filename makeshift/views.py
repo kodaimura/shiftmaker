@@ -53,16 +53,15 @@ def shift(request):
 	lls = [[]] * 32
 	#role_dictとllsをデータから組み立てる
 	for member in group_users:
+		#応急処置 日付選択せずにシフト送信した人がいた場合
+		if member.days == '[]':
+			continue
+
 		name = member.name
 		role_dic[name] = int(member.role)
 		if member.morethan:
 			morethan_list.append(name)
 		itr = member.days.lstrip('[').rstrip(']').split(',')
-
-		#応急処置 日付選択せずにシフト送信した人がいた場合
-		#itr = ['']になって '' がint型にできない
-		if itr[0] == '':
-			continue
 
 		for day in itr:
 			ls = lls[int(day)].copy()
