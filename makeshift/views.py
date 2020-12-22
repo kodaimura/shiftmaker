@@ -7,6 +7,7 @@ import itertools
 import collections
 import statistics
 import random
+import calender
 import datetime
 
 # マイページ
