@@ -38,7 +38,7 @@ def shift(request):
 
 	next_month = 1 if (date.month == 12) else date.month + 1
 	next_month_year = date.year + 1 if (date.month == 12) else date.year
-	next_month_days = calendar.monthrange(next_month_year, next_month)
+	next_month_days = calendar.monthrange(next_month_year, next_month)[1]
 
 	group_users = Profile.objects.filter(Q(days__isnull = False) & Q(group = groupID) 
 			& Q(update_at__year = date.year) & Q(update_at__month= date.month))
@@ -96,16 +96,16 @@ def shift(request):
 
 
 def is_weekend (year, month, day):
+	if day == 0:
+		return False
 	weekday = datetime.datetime(year = year, month=month, day=day).weekday()
-
 	return weekday == 4 or weekday == 5
 
 
 
 #シフトを組むmain
 def makeshift(lls, role_dic, morethan_list, year, month):
-	lls = list(map(lambda i, ls: 
-		makepairs(ls, role_dic, is_weekend(year, month, i)),
+	lls = list(map(lambda x: makepairs(x[1], role_dic, is_weekend(year, month, x[0])),
 		 enumerate(lls)))
 
 	num_of_member = len(role_dic)
