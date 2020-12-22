@@ -25,7 +25,8 @@ def mypage(request):
 		"group_users": group_users,
 	}
 	return render(request, 'makeshift/mypage.html', context)
-	
+
+
 # マイページからのpostでシフトを組む。
 # postでは休業日が渡される。
 def shift(request):
@@ -33,6 +34,11 @@ def shift(request):
 	user_obj = request.user.profile
 	groupID = user_obj.group
 	date = datetime.datetime.now()
+
+	next_month = 1 if (date.month == 12) else date.month + 1
+	next_month_year = date.year + 1 if (date.month == 12) else date.year
+	next_month_days = calendar.monthrange(next_month_year, next_month)
+
 	group_users = Profile.objects.filter(Q(days__isnull = False) & Q(group = groupID) 
 			& Q(update_at__year = date.year) & Q(update_at__month= date.month))
 
@@ -50,7 +56,7 @@ def shift(request):
 	morethan_list = []
 	#lls は誰が何日に入れるかをリストで表したもの。
 	# 1日は a,b,c 2日は b,d,e が入れる -> [[], [a,b,c], [b,d,e], ...]
-	lls = [[]] * 32
+	lls = [[]] * (next_month_days + 1)
 	#role_dictとllsをデータから組み立てる
 	for member in group_users:
 		#応急処置 日付選択せずにシフト送信した人がいた場合
@@ -72,7 +78,7 @@ def shift(request):
 		lls[int(d)] = []
 
 	#makeshiftでシフトを組んで javascriptで表示しやすいよう整形
-	shift = makeshift(lls, role_dic, morethan_list)
+	shift = makeshift(lls, role_dic, morethan_list, next_month_year, next_month)
 	shift = [i if type(i) == 'str' else " ".join(i) for i in shift]
 	shift = str(shift).lstrip('[').rstrip(']')
 
@@ -88,16 +94,25 @@ def shift(request):
 	return render(request, 'makeshift/shift.html', context)
 
 
+def is_weekend (year, month, day):
+	weekday = datetime.datetime(year = year, month=month, day=day).weekday()
+
+	return weekday == 4 or weekday == 5
+
+
+
 #シフトを組むmain
-def makeshift(lls, role_dic, morethan_list):
-	lls = list(map(lambda ls: makepairs(ls, role_dic), lls))
+def makeshift(lls, role_dic, morethan_list, year, month):
+	lls = list(map(lambda i, ls: 
+		makepairs(ls, role_dic, is_weekend(year, month, i)),
+		 enumerate(lls)))
 
 	num_of_member = len(role_dic)
 	minimum = float('inf')
 	shift = []
 
 	#仮のシフトをランダムに組んで、最も評価の高いシフトに決定する。
-	for i in range(50000):
+	for i in range(40000):
 		shift0 = [[] if k==[] else random.choice(k) for k in lls]
 
 		variance, n = eval(shift0, morethan_list)
@@ -112,7 +127,7 @@ def makeshift(lls, role_dic, morethan_list):
 # [a,b,c] -> [[a,b],[a,c],[b,c]]
 # ただし、,キッチン+ホールまたは両方+(両方orキッチンorホール)に限定する。
 # キッチン+キッチン　または ホール+ホールしかなければ。それを返す。
-def makepairs(ls, role_dic):
+def makepairs(ls, role_dic, is_weekend):
 	if (len(ls) < 2):
 		return ls
 
@@ -120,7 +135,7 @@ def makepairs(ls, role_dic):
 	ret = list(filter(lambda ls: role_dic[ls[0]] == 3 
 		or role_dic[ls[1]] == 3 or (role_dic[ls[0]]+role_dic[ls[1]]) == 3, combs))
 
-	if ret:
+	if is_weekend and ret:
 		return ret 
 
 	else:
